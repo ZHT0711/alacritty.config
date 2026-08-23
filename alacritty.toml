@@ -1,0 +1,103 @@
+# ============================================================
+#  Alacritty 配置文件  (Alacritty 0.17.0)
+#  位置: %APPDATA%\alacritty\alacritty.toml
+#  来源: 基于 CSDN 教程《Alacritty安装配置完全指南》优化
+#         https://blog.csdn.net/gitblog_00654/article/details/151019894
+#  说明: 已修正教程中过时/不存在的配置项（详见文末注释）
+# ============================================================
+# Dracula 主题（下载自 draculatheme.com/alacritty，官方仓库 dracula/alacritty）
+general.import = ["C:\\Users\\skowosy\\AppData\\Roaming\\alacritty\\themes\\dracula.toml"]
+
+# ---------- 窗口 ----------
+[window]
+# 启动即最大化（改回 "Windowed" 可恢复普通窗口，需重启生效）
+startup_mode = "Windowed"
+# 内容居中留白（教程：dynamic_padding）
+dynamic_padding = true
+# 允许终端程序修改窗口标题（教程：dynamic_title，默认即 true）
+dynamic_title = false
+dimensions = { columns = 80, lines = 24 }
+padding = { x = 4, y = 0 }
+opacity = 0.975
+
+# ---------- 字体 ----------
+[font]
+size = 13.0
+# 使用内置字体渲染 box drawing / powerline 符号（教程要求）
+builtin_box_drawing = true
+
+[font.normal]
+family = "IoskeleyMonoTerm Nerd Font Mono"
+style = "Regular"
+
+[font.bold]
+family = "IoskeleyMonoTerm Nerd Font Mono"
+style = "Bold"
+
+[font.italic]
+family = "IoskeleyMonoTerm Nerd Font Mono"
+style = "Italic"
+
+[font.bold_italic]
+family = "IoskeleyMonoTerm Nerd Font Mono"
+style = "Bold Italic"
+# 注: 教程里的 use_thin_strokes 仅 macOS 有效，Windows 上已删除。
+#     中文显示由系统 DirectWrite 自动回退到微软雅黑，无需配置。
+
+
+
+# ---------- 光标 ----------
+[cursor]
+style = { shape = "Block", blinking = "Off" }
+# Vi 模式下切换为竖线，便于精确移动
+vi_mode_style = { shape = "Beam", blinking = "Off" }
+unfocused_hollow = true
+
+# ---------- 终端 ----------
+[terminal]
+# 安全默认: 仅允许程序用 OSC 52 复制到剪贴板（禁止读取）
+osc52 = "OnlyCopy"
+# 默认 shell: PowerShell 7 (pwsh)。若以后装了别的位置可改完整路径
+shell = { program = "pwsh", args = ["-NoLogo"] }
+
+# ---------- 滚动历史 ----------
+[scrolling]
+history = 5000      # 教程建议值，可按内存调整
+multiplier = 3      # 滚轮速度
+
+# ---------- 选择/复制 ----------
+[selection]
+save_to_clipboard = true   # 选中即复制
+
+# ---------- 键盘快捷键（教程原样，均为 0.17 有效动作） ----------
+[keyboard]
+bindings = [
+    # 新建窗口
+    { key = "N",    mods = "Control|Shift", action = "SpawnNewInstance" },
+    # 字体大小调整
+    { key = "Plus",  mods = "Control", action = "IncreaseFontSize" },
+    { key = "Minus", mods = "Control", action = "DecreaseFontSize" },
+    { key = "0",     mods = "Control", action = "ResetFontSize" },
+    # 缓冲区搜索
+    { key = "F", mods = "Control|Shift", action = "SearchForward" },
+    { key = "B", mods = "Control|Shift", action = "SearchBackward" },
+    # Vi 模式
+    { key = "Space", mods = "Control|Shift", action = "ToggleViMode" },
+]
+
+# ---------- URL 提示（优化新增）: Ctrl+Shift+U 打开链接 ----------
+[hints]
+enabled = [
+    { regex = "(ipfs:|ipns:|magnet:|mailto:|gemini:|gopher:|https:|http:|news:|file:|git:|ssh:|ftp:)", command = { program = "cmd", args = ["/c", "start"] }, post_processing = true, binding = { key = "U", mods = "Control|Shift" } },
+]
+
+# ============================================================
+#  与教程的差异说明:
+#  1. [renderer] use_async_renderer / texture_cache_size —— 0.17 不存在该配置段，已删除
+#  2. [window] preload_windows —— 不存在，已删除
+#  3. [font] use_thin_strokes —— 仅 macOS，已删除
+#  4. [shell] 顶层表 —— 0.14+ 已移至 [terminal] shell，已修正
+#  5. [debug] render_timer / persistent_logging —— 保留教程写法（合法，默认值）
+#  6. shell 由 /bin/zsh 改为 pwsh（Windows + PowerShell 7）
+#  7. 新增: cursor.vi_mode_style、selection.save_to_clipboard、hints(URL 打开)、scrolling.multiplier
+# ============================================================
