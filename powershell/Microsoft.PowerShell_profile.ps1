@@ -183,3 +183,5 @@ function mkcd {
 function .. { Set-Location .. }
 function ... { Set-Location ../.. }
 function reload { . $PROFILE }
+
+function gb { & 'D:\Program Files\Git\bin\bash.exe' --login -i }
