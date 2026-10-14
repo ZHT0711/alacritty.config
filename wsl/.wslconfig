@@ -1,0 +1,6 @@
+[wsl2]
+networkingMode=Mirrored
+vmIdleTimeout=3600000
+
+[experimental]
+autoMemoryReclaim=gradual

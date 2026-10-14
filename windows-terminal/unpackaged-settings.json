@@ -1,0 +1,18 @@
+{
+    "profiles": {
+        "list": [
+            {
+                "commandline": "\"%WINDIR%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\" -ExecutionPolicy ByPass -NoExit -Command & 'D:\\miniconda3\\shell\\condabin\\conda-hook.ps1' ; conda activate 'D:\\miniconda3' ",
+                "name": "Anaconda PowerShell Prompt (miniconda3)",
+                "icon": "D:\\miniconda3\\Menu\\anaconda_powershell_prompt.ico",
+                "startingDirectory": "%USERPROFILE%"
+            },
+            {
+                "commandline": "\"%WINDIR%\\System32\\cmd.exe\" /K D:\\miniconda3\\Scripts\\activate.bat D:\\miniconda3",
+                "name": "Anaconda Prompt (miniconda3)",
+                "icon": "D:\\miniconda3\\Menu\\anaconda_prompt.ico",
+                "startingDirectory": "%USERPROFILE%"
+            }
+        ]
+    }
+}

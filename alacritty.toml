@@ -1,30 +1,46 @@
-# ============================================================
-#  Alacritty 配置文件  (Alacritty 0.17.0)
-#  位置: %APPDATA%\alacritty\alacritty.toml
-#  来源: 基于 CSDN 教程《Alacritty安装配置完全指南》优化
-#         https://blog.csdn.net/gitblog_00654/article/details/151019894
-#  说明: 已修正教程中过时/不存在的配置项（详见文末注释）
-# ============================================================
-# Dracula 主题（下载自 draculatheme.com/alacritty，官方仓库 dracula/alacritty）
-general.import = ["C:\\Users\\skowosy\\AppData\\Roaming\\alacritty\\themes\\dracula.toml"]
+# ============================================================================
+#  Alacritty 配置  (Alacritty 0.17.0 / Windows 11)
+#  路径 : %APPDATA%\alacritty\alacritty.toml
+#  配套 : themes/dracula.toml + IoskeleyMonoTerm Nerd Font Mono + Oh My Posh
+#  备份 : C:\Users\skowosy\.config-backup\20261014-094745\alacritty.toml.bak
+#  自检 : alacritty migrate -c "%APPDATA%\alacritty\alacritty.toml" --dry-run
+#  改完即生效（live_config_reload = true），无需重启终端
+# ============================================================================
 
-# ---------- 窗口 ----------
+# ------------------------------- 常规 -------------------------------------
+[general]
+# Dracula 官方配色（绝对路径，用正斜杠避免转义）
+import = ["C:/Users/skowosy/AppData/Roaming/alacritty/themes/dracula.toml"]
+# 保存本文件后自动热重载
+live_config_reload = true
+
+# ------------------------------- 窗口 -------------------------------------
 [window]
-# 启动即最大化（改回 "Windowed" 可恢复普通窗口，需重启生效）
+title = "Alacritty"
+# 需要开机最大化就改成 "Maximized"
 startup_mode = "Windowed"
-# 内容居中留白（教程：dynamic_padding）
+# 默认窗口大小：120 列 x 32 行（比 80x24 更适合看日志/代码）
+dimensions = { columns = 120, lines = 32 }
+# 窗口拉大时内容居中留白
 dynamic_padding = true
-# 允许终端程序修改窗口标题（教程：dynamic_title，默认即 true）
-dynamic_title = false
-dimensions = { columns = 80, lines = 24 }
-padding = { x = 4, y = 0 }
-opacity = 0.975
+padding = { x = 10, y = 8 }
+# 允许 shell / Oh My Posh 改写窗口标题
+dynamic_title = true
+# 半透明（0.0 - 1.0，1.0 为完全不透明）
+opacity = 0.96
+# 深色标题栏，和 Dracula 统一
+decorations = "Full"
+decorations_theme_variant = "Dark"
+# 说明：blur（亚克力模糊）与 resize_increments 在 0.17 的 Windows 版不生效
+#       （官方手册标注仅 macOS / X11 / Wayland），所以不写进配置，免得造成误解。
 
-# ---------- 字体 ----------
+# ------------------------------- 字体 -------------------------------------
 [font]
 size = 13.0
-# 使用内置字体渲染 box drawing / powerline 符号（教程要求）
+# 用内置矢量图形绘制制表符/框线，缺字时不会画断线
 builtin_box_drawing = true
+# 基线微调，让 Nerd Font 图标与文字垂直居中（觉得偏高就改成 y = 0）
+offset = { x = 0, y = 1 }
 
 [font.normal]
 family = "IoskeleyMonoTerm Nerd Font Mono"
@@ -41,63 +57,97 @@ style = "Italic"
 [font.bold_italic]
 family = "IoskeleyMonoTerm Nerd Font Mono"
 style = "Bold Italic"
-# 注: 教程里的 use_thin_strokes 仅 macOS 有效，Windows 上已删除。
-#     中文显示由系统 DirectWrite 自动回退到微软雅黑，无需配置。
+# 缺字（图标）由系统自动回退到已安装的 "Symbols Nerd Font"，无需配置。
+# 中文由 DirectWrite 回退到微软雅黑。
 
-
-
-# ---------- 光标 ----------
+# ------------------------------- 光标 -------------------------------------
 [cursor]
 style = { shape = "Block", blinking = "Off" }
-# Vi 模式下切换为竖线，便于精确移动
+# Vi 模式下换成竖线，方便定位
 vi_mode_style = { shape = "Beam", blinking = "Off" }
 unfocused_hollow = true
+thickness = 0.15
 
-# ---------- 终端 ----------
+# ------------------------------- 终端 -------------------------------------
 [terminal]
-# 安全默认: 仅允许程序用 OSC 52 复制到剪贴板（禁止读取）
+# 只允许程序把内容写进剪贴板（禁止读取剪贴板），更安全
 osc52 = "OnlyCopy"
-# 默认 shell: PowerShell 7 (pwsh)。若以后装了别的位置可改完整路径
+# 默认 shell：PowerShell 7。想默认进 Nushell 就换成 "nu"
 shell = { program = "pwsh", args = ["-NoLogo"] }
 
-# ---------- 滚动历史 ----------
+# ------------------------------- 滚动 -------------------------------------
 [scrolling]
-history = 5000      # 教程建议值，可按内存调整
-multiplier = 3      # 滚轮速度
+history = 100000
+multiplier = 3
 
-# ---------- 选择/复制 ----------
+# ----------------------------- 选择/复制 ----------------------------------
 [selection]
-save_to_clipboard = true   # 选中即复制
+# 选中即复制
+save_to_clipboard = true
 
-# ---------- 键盘快捷键（教程原样，均为 0.17 有效动作） ----------
+# ------------------------------- 鼠标 -------------------------------------
+[mouse]
+# 打字时隐藏鼠标指针
+hide_when_typing = true
+
+# ------------------------------- 提示音 -----------------------------------
+[bell]
+# 视觉响铃时长（毫秒），0 = 不闪屏；默认就是 0，这里显式写出来表明意图
+duration = 0
+# 注意：0.17 的 bell.animation 只接受 Ease* / Linear，没有 "Off" 这个值，
+#       写 "Off" 会导致启动时报配置错误并弹红条；默认 command = "None" 即不发声。
+
+# ----------------------------- 链接识别 -----------------------------------
+[hints]
+enabled = [
+    # Ctrl+Shift+U 用键盘选择链接；
+    # 鼠标悬停时按住 Ctrl 会加下划线，Ctrl+左键直接打开（mouse 必须写在这一项里面）
+    { regex = "(ipfs:|ipns:|magnet:|mailto:|gemini:|gopher:|https:|http:|news:|file:|git:|ssh:|ftp:)", command = { program = "cmd", args = ["/c", "start"] }, post_processing = true, mouse = { enabled = true, mods = "Control" }, binding = { key = "U", mods = "Control|Shift" } },
+]
+
+# ----------------------------- 快捷键 -------------------------------------
+# 说明：Alacritty 默认已有 Ctrl+Shift+C/V（复制/粘贴）、F11（全屏）等，
+#       下面只“补充”缺少的好用组合。
+#       刻意没有把 Ctrl+V 绑成粘贴 —— 那样会抢掉 Neovim 的块选择。
 [keyboard]
 bindings = [
-    # 新建窗口
-    { key = "N",    mods = "Control|Shift", action = "SpawnNewInstance" },
-    # 字体大小调整
-    { key = "Plus",  mods = "Control", action = "IncreaseFontSize" },
-    { key = "Minus", mods = "Control", action = "DecreaseFontSize" },
-    { key = "0",     mods = "Control", action = "ResetFontSize" },
+    # 新窗口：Ctrl+Shift+N（原有）+ Ctrl+Shift+T（贴合 Windows Terminal 习惯）
+    { key = "N", mods = "Control|Shift", action = "SpawnNewInstance" },
+    { key = "T", mods = "Control|Shift", action = "SpawnNewInstance" },
+    # 复制 / 粘贴（显式写出，便于日后自定义）
+    { key = "C", mods = "Control|Shift", action = "Copy" },
+    { key = "V", mods = "Control|Shift", action = "Paste" },
+    # 字号：Ctrl+= / Ctrl+- / Ctrl+0 复位
+    { key = "Plus",   mods = "Control", action = "IncreaseFontSize" },
+    { key = "Equals", mods = "Control", action = "IncreaseFontSize" },
+    { key = "Minus",  mods = "Control", action = "DecreaseFontSize" },
+    { key = "0",      mods = "Control", action = "ResetFontSize" },
     # 缓冲区搜索
     { key = "F", mods = "Control|Shift", action = "SearchForward" },
     { key = "B", mods = "Control|Shift", action = "SearchBackward" },
-    # Vi 模式
+    # 滚动（逐行 + 翻页 + 首尾）
+    { key = "Up",       mods = "Shift", action = "ScrollLineUp" },
+    { key = "Down",     mods = "Shift", action = "ScrollLineDown" },
+    { key = "PageUp",   mods = "Shift", action = "ScrollPageUp" },
+    { key = "PageDown", mods = "Shift", action = "ScrollPageDown" },
+    { key = "Home",     mods = "Shift", action = "ScrollToTop" },
+    { key = "End",      mods = "Shift", action = "ScrollToBottom" },
+    # Vi 模式（Ctrl+Shift+Space 进入，用 hjkl 选择文本）
     { key = "Space", mods = "Control|Shift", action = "ToggleViMode" },
+    # Alt+Enter 全屏
+    { key = "Enter", mods = "Alt", action = "ToggleFullscreen" },
 ]
 
-# ---------- URL 提示（优化新增）: Ctrl+Shift+U 打开链接 ----------
-[hints]
-enabled = [
-    { regex = "(ipfs:|ipns:|magnet:|mailto:|gemini:|gopher:|https:|http:|news:|file:|git:|ssh:|ftp:)", command = { program = "cmd", args = ["/c", "start"] }, post_processing = true, binding = { key = "U", mods = "Control|Shift" } },
-]
-
-# ============================================================
-#  与教程的差异说明:
-#  1. [renderer] use_async_renderer / texture_cache_size —— 0.17 不存在该配置段，已删除
-#  2. [window] preload_windows —— 不存在，已删除
-#  3. [font] use_thin_strokes —— 仅 macOS，已删除
-#  4. [shell] 顶层表 —— 0.14+ 已移至 [terminal] shell，已修正
-#  5. [debug] render_timer / persistent_logging —— 保留教程写法（合法，默认值）
-#  6. shell 由 /bin/zsh 改为 pwsh（Windows + PowerShell 7）
-#  7. 新增: cursor.vi_mode_style、selection.save_to_clipboard、hints(URL 打开)、scrolling.multiplier
-# ============================================================
+# ============================================================================
+#  本次相对旧配置的改动
+#  1. dimensions 80x24 -> 120x32；padding x4/y0 -> x10/y8
+#  2. dynamic_title false -> true（配合 Oh My Posh 的窗口标题模板）
+#  3. 新增 decorations_theme_variant = "Dark"（深色标题栏）
+#  4. 字体新增 offset 基线微调
+#  5. history 5000 -> 100000
+#  6. [bell] 显式 duration = 0（不闪屏）；不写 animation（0.17 没有 "Off" 值）
+#  7. hints 条目内加 mouse = { enabled, mods = "Control" }：Ctrl+左键开链接
+#  8. 快捷键补充 Ctrl+Shift+T、字号 Ctrl+=、Shift 滚动/首尾等
+#  已删除（0.17 Windows 上无效或非法，旧配置里若有人照抄会踩坑）：
+#    blur / resize_increments（仅 macOS/X11/Wayland）、bell.animation = "Off"（非法枚举值）
+# ============================================================================
