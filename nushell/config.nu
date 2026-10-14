@@ -2,38 +2,46 @@
 #  Nushell 配置 (config.nu)
 #  路径 : %APPDATA%\nushell\config.nu
 #  组成 : $env.config 外观/行为 → zoxide → Oh My Posh → 别名/小工具
-#  说明 : $env.config 只写要覆盖的键，其余自动沿用 nushell 默认值（深合并）
+#  说明 : 逐项覆盖需要的键，保留 Nushell 默认值和其他插件设置
 #  自检 : nu -c 'print $env.POSH_CONFIG'（应输出主题路径）
 # ============================================================================
 
 # --------------------------- 1. 外观与行为 ---------------------------------
-$env.config = {
-    show_banner: false # 关掉启动横幅（想看就改成 true）
-    edit_mode: emacs
-    error_style: fancy
-    buffer_editor: 'nvim' # ctrl+o 用 nvim 打开当前命令行
-    cursor_shape: {
-        emacs: block
-        vi_insert: line
-        vi_normal: block
-    }
-    table: {
-        mode: rounded
-        header_on_separator: false
-    }
-    filesize: {
-        unit: metric
-        show_unit: true
-    }
-    ls: {
-        use_ls_colors: true
-        clickable_links: false
-    }
-    completions: {
-        case_sensitive: false
-        quick: true
-        partial: true
-        algorithm: prefix
+$env.config.show_banner = false
+$env.config.edit_mode = 'emacs'
+$env.config.error_style = 'fancy'
+$env.config.buffer_editor = 'nvim'
+$env.config.cursor_shape = {
+    emacs: 'block'
+    vi_insert: 'line'
+    vi_normal: 'block'
+}
+$env.config.table.mode = 'rounded'
+$env.config.table.header_on_separator = false
+$env.config.filesize.unit = 'metric'
+$env.config.filesize.show_unit = true
+$env.config.ls.use_ls_colors = true
+$env.config.ls.clickable_links = true
+
+# SQLite 历史支持更可靠的并发会话和结构化查询。
+$env.config.history = {
+    file_format: 'sqlite'
+    max_size: 1_000_000
+    sync_on_enter: true
+    isolation: true
+}
+
+$env.config.completions.case_sensitive = false
+$env.config.completions.quick = true
+$env.config.completions.partial = true
+$env.config.completions.algorithm = 'fuzzy'
+$env.config.completions.persistent_menus = true
+$env.config.completions.cache_size = 100
+
+# 如果安装了 Carapace，为 git、winget、docker 等外部命令提供参数补全。
+if (which carapace | is-not-empty) {
+    $env.config.completions.external.completer = {|place|
+        carapace $place.command.0 nushell ...$place.command | from json
     }
 }
 
@@ -76,7 +84,7 @@ $env.config = (
 # ----------------------------- 3. Oh My Posh -------------------------------
 # 官方用法：这一行会把提示符脚本写到 $nu.data-dir/vendor/autoload/，
 # nushell 启动时会自动加载该目录，于是提示符交给 Oh My Posh（与 pwsh 同一套主题）
-let omp_theme = ($env.POSH_THEME? | default 'C:\Users\skowosy\.config\oh-my-posh\dracula-dev.omp.json')
+let omp_theme = ($env.POSH_THEME? | default ($env.USERPROFILE | path join '.config' 'oh-my-posh' 'dracula-dev.omp.json'))
 oh-my-posh init nu --config $omp_theme
 
 # ----------------------------- 4. 别名 / 小工具 ----------------------------

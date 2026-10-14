@@ -1,6 +1,7 @@
 [wsl2]
 networkingMode=Mirrored
-vmIdleTimeout=3600000
+# 空闲 10 分钟后允许 WSL 虚拟机释放资源。
+vmIdleTimeout=600000
 
 [experimental]
 autoMemoryReclaim=gradual

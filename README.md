@@ -16,3 +16,13 @@ Configuration files currently in use on this Windows PC. The repository keeps th
 | WSL | `wsl/.wslconfig` | `%USERPROFILE%\.wslconfig` |
 
 These are snapshots of manually maintained configuration. History, caches, plugins, and generated startup scripts are excluded. Some files contain paths specific to this PC (including the Windows username and `D:` drive), so update those paths when restoring elsewhere.
+
+## Included conveniences
+
+- Consistent Dracula colors and Ioskeley Nerd Font across Alacritty, WezTerm, and Windows Terminal.
+- URL hints in Alacritty and WezTerm.
+- WezTerm WSL-domain tabs, pane splitting, pane navigation, and Git Bash launcher.
+- PowerShell, Nushell, and Git Bash integrations for Oh My Posh, zoxide, eza, bat, and fzf where installed.
+- Nushell SQLite history, fuzzy completion, and optional Carapace completion.
+
+The packaged Windows Terminal settings are the active Microsoft Store/MSIX configuration on this machine. The unpackaged file is retained as a snapshot for portable installations.

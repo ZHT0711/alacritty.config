@@ -184,4 +184,20 @@ function .. { Set-Location .. }
 function ... { Set-Location ../.. }
 function reload { . $PROFILE }
 
-function gb { & 'D:\Program Files\Git\bin\bash.exe' --login -i }
+# 从 git.exe 自动推导 Git 安装目录，避免绑定盘符和安装位置。
+function gb {
+    $GitCommand = Get-Command git.exe -ErrorAction SilentlyContinue
+    if (-not $GitCommand) {
+        Write-Error '未找到 Git for Windows。'
+        return
+    }
+
+    $GitRoot = Split-Path (Split-Path $GitCommand.Source -Parent) -Parent
+    $GitBash = Join-Path $GitRoot 'bin\bash.exe'
+    if (-not (Test-Path -LiteralPath $GitBash)) {
+        Write-Error "未找到 Git Bash：$GitBash"
+        return
+    }
+
+    & $GitBash --login -i
+}

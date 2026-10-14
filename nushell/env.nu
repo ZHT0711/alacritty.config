@@ -20,4 +20,4 @@ if (($env.USERPROFILE | path join 'scoop' 'apps' 'nu' 'current' 'less.exe') | pa
 
 # ------------------------------- 提示符 ------------------------------------
 # Oh My Posh 主题路径（config.nu 里生成 autoload 脚本时会用到）
-$env.POSH_THEME = 'C:\Users\skowosy\.config\oh-my-posh\dracula-dev.omp.json'
+$env.POSH_THEME = ($env.USERPROFILE | path join '.config' 'oh-my-posh' 'dracula-dev.omp.json')

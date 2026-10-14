@@ -9,8 +9,8 @@
 
 # ------------------------------- 常规 -------------------------------------
 [general]
-# Dracula 官方配色（绝对路径，用正斜杠避免转义）
-import = ["C:/Users/skowosy/AppData/Roaming/alacritty/themes/dracula.toml"]
+# Dracula 官方配色（相对路径，复制整个目录后无需修改用户名）
+import = ["themes/dracula.toml"]
 # 保存本文件后自动热重载
 live_config_reload = true
 
@@ -102,7 +102,7 @@ duration = 0
 enabled = [
     # Ctrl+Shift+U 用键盘选择链接；
     # 鼠标悬停时按住 Ctrl 会加下划线，Ctrl+左键直接打开（mouse 必须写在这一项里面）
-    { regex = "(ipfs:|ipns:|magnet:|mailto:|gemini:|gopher:|https:|http:|news:|file:|git:|ssh:|ftp:)", command = { program = "cmd", args = ["/c", "start"] }, post_processing = true, mouse = { enabled = true, mods = "Control" }, binding = { key = "U", mods = "Control|Shift" } },
+    { regex = '''(ipfs:|ipns:|magnet:|mailto:|gemini://|gopher://|https://|http://|news:|file:|git://|ssh:|ftp://)[^\u0000-\u001F\u007F-\u009F<>"\s{-}\^⟨⟩`]+''', hyperlinks = true, command = { program = "cmd", args = ["/c", "start", ""] }, post_processing = true, mouse = { enabled = true, mods = "Control" }, binding = { key = "U", mods = "Control|Shift" } },
 ]
 
 # ----------------------------- 快捷键 -------------------------------------
