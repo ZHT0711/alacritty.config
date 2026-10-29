@@ -23,11 +23,11 @@ startup_mode = "Windowed"
 dimensions = { columns = 120, lines = 32 }
 # 窗口拉大时内容居中留白
 dynamic_padding = true
-padding = { x = 10, y = 8 }
+padding = { x = 14, y = 10 }
 # 允许 shell / Oh My Posh 改写窗口标题
 dynamic_title = true
 # 半透明（0.0 - 1.0，1.0 为完全不透明）
-opacity = 0.96
+opacity = 0.95
 # 深色标题栏，和 Dracula 统一
 decorations = "Full"
 decorations_theme_variant = "Dark"
@@ -68,12 +68,11 @@ vi_mode_style = { shape = "Beam", blinking = "Off" }
 unfocused_hollow = true
 thickness = 0.15
 
+
 # ------------------------------- 终端 -------------------------------------
 [terminal]
-# 只允许程序把内容写进剪贴板（禁止读取剪贴板），更安全
-osc52 = "OnlyCopy"
-# 默认 shell：PowerShell 7。想默认进 Nushell 就换成 "nu"
-shell = { program = "pwsh", args = ["-NoLogo"] }
+# 默认 shell：brush。
+shell = { program = "pwsh.exe", args = ["-NoLogo"] }
 
 # ------------------------------- 滚动 -------------------------------------
 [scrolling]
@@ -114,6 +113,12 @@ bindings = [
     # 新窗口：Ctrl+Shift+N（原有）+ Ctrl+Shift+T（贴合 Windows Terminal 习惯）
     { key = "N", mods = "Control|Shift", action = "SpawnNewInstance" },
     { key = "T", mods = "Control|Shift", action = "SpawnNewInstance" },
+    # Alt+P/G/M/B/N opens another shell in a new window.
+    { key = "P", mods = "Alt", command = { program = "alacritty", args = ["-e", "pwsh.exe", "-NoLogo"] } },
+    { key = "G", mods = "Alt", command = { program = "alacritty", args = ["-e", 'D:\Program Files\Git\bin\bash.exe', "--login", "-i"] } },
+    { key = "M", mods = "Alt", command = { program = "alacritty", args = ["-e", "pwsh.exe", "-NoLogo", "-Command", "ucrt"] } },
+    { key = "B", mods = "Alt", command = { program = "alacritty", args = ["-e", "brush.exe"] } },
+    { key = "N", mods = "Alt", command = { program = "alacritty", args = ["-e", "nu.exe"] } },
     # 复制 / 粘贴（显式写出，便于日后自定义）
     { key = "C", mods = "Control|Shift", action = "Copy" },
     { key = "V", mods = "Control|Shift", action = "Paste" },
@@ -138,16 +143,4 @@ bindings = [
     { key = "Enter", mods = "Alt", action = "ToggleFullscreen" },
 ]
 
-# ============================================================================
-#  本次相对旧配置的改动
-#  1. dimensions 80x24 -> 120x32；padding x4/y0 -> x10/y8
-#  2. dynamic_title false -> true（配合 Oh My Posh 的窗口标题模板）
-#  3. 新增 decorations_theme_variant = "Dark"（深色标题栏）
-#  4. 字体新增 offset 基线微调
-#  5. history 5000 -> 100000
-#  6. [bell] 显式 duration = 0（不闪屏）；不写 animation（0.17 没有 "Off" 值）
-#  7. hints 条目内加 mouse = { enabled, mods = "Control" }：Ctrl+左键开链接
-#  8. 快捷键补充 Ctrl+Shift+T、字号 Ctrl+=、Shift 滚动/首尾等
-#  已删除（0.17 Windows 上无效或非法，旧配置里若有人照抄会踩坑）：
-#    blur / resize_increments（仅 macOS/X11/Wayland）、bell.animation = "Off"（非法枚举值）
-# ============================================================================
+
