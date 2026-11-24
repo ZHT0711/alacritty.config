@@ -71,7 +71,7 @@ thickness = 0.15
 
 # ------------------------------- 终端 -------------------------------------
 [terminal]
-# 默认 shell：brush。
+# 默认 shell：PowerShell 7。
 shell = { program = "pwsh.exe", args = ["-NoLogo"] }
 
 # ------------------------------- 滚动 -------------------------------------
@@ -113,15 +113,21 @@ bindings = [
     # 新窗口：Ctrl+Shift+N（原有）+ Ctrl+Shift+T（贴合 Windows Terminal 习惯）
     { key = "N", mods = "Control|Shift", action = "SpawnNewInstance" },
     { key = "T", mods = "Control|Shift", action = "SpawnNewInstance" },
-    # Alt+P/G/M/B/N opens another shell in a new window.
-    { key = "P", mods = "Alt", command = { program = "alacritty", args = ["-e", "pwsh.exe", "-NoLogo"] } },
-    { key = "G", mods = "Alt", command = { program = "alacritty", args = ["-e", 'D:\Program Files\Git\bin\bash.exe', "--login", "-i"] } },
-    { key = "M", mods = "Alt", command = { program = "alacritty", args = ["-e", "pwsh.exe", "-NoLogo", "-Command", "ucrt"] } },
-    { key = "B", mods = "Alt", command = { program = "alacritty", args = ["-e", "brush.exe"] } },
-    { key = "N", mods = "Alt", command = { program = "alacritty", args = ["-e", "nu.exe"] } },
+    # Alt+L: choose any backend; Alt+P/G/M/B/N: direct backend windows.
+    { key = "P", mods = "Alt", command = { program = "alacritty", args = ["-e", "C:/Users/skowosy/AppData/Local/Microsoft/WindowsApps/pwsh.exe", "-NoLogo", "-NoProfile", "-File", "C:/Users/skowosy/.config/terminal/shell-switch.ps1", "-Target", "pwsh"] } },
+    { key = "G", mods = "Alt", command = { program = "alacritty", args = ["-e", "C:/Users/skowosy/AppData/Local/Microsoft/WindowsApps/pwsh.exe", "-NoLogo", "-NoProfile", "-File", "C:/Users/skowosy/.config/terminal/shell-switch.ps1", "-Target", "gitbash"] } },
+    { key = "M", mods = "Alt", command = { program = "alacritty", args = ["-e", "C:/Users/skowosy/AppData/Local/Microsoft/WindowsApps/pwsh.exe", "-NoLogo", "-NoProfile", "-File", "C:/Users/skowosy/.config/terminal/shell-switch.ps1", "-Target", "ucrt64"] } },
+    { key = "B", mods = "Alt", command = { program = "alacritty", args = ["-e", "C:/Users/skowosy/AppData/Local/Microsoft/WindowsApps/pwsh.exe", "-NoLogo", "-NoProfile", "-File", "C:/Users/skowosy/.config/terminal/shell-switch.ps1", "-Target", "brush"] } },
+    { key = "N", mods = "Alt", command = { program = "alacritty", args = ["-e", "C:/Users/skowosy/AppData/Local/Microsoft/WindowsApps/pwsh.exe", "-NoLogo", "-NoProfile", "-File", "C:/Users/skowosy/.config/terminal/shell-switch.ps1", "-Target", "nu"] } },
+    { key = "L", mods = "Alt", command = { program = "alacritty", args = ["-e", "C:/Users/skowosy/AppData/Local/Microsoft/WindowsApps/pwsh.exe", "-NoLogo", "-NoProfile", "-File", "C:/Users/skowosy/.config/terminal/shell-switch.ps1", "-Target", "menu"] } },
     # 复制 / 粘贴（显式写出，便于日后自定义）
     { key = "C", mods = "Control|Shift", action = "Copy" },
     { key = "V", mods = "Control|Shift", action = "Paste" },
+    # 全选：Alacritty 没有 SelectAll 这个内置动作（0.17.0 的动作表里查不到，
+    #       写了会在启动时报 "unknown keyboard action `SelectAll`" 并弹红色横幅，
+    #       然后这条绑定被静默忽略）。所以这里不绑 —— 需要全选时：
+    #       鼠标三击选一行 / 拖拽，或 Ctrl+Shift+Space 进 Vi 模式后用按键选择。
+    #       配合上面的 selection.save_to_clipboard = true，选中即已复制。
     # 字号：Ctrl+= / Ctrl+- / Ctrl+0 复位
     { key = "Plus",   mods = "Control", action = "IncreaseFontSize" },
     { key = "Equals", mods = "Control", action = "IncreaseFontSize" },
@@ -139,8 +145,6 @@ bindings = [
     { key = "End",      mods = "Shift", action = "ScrollToBottom" },
     # Vi 模式（Ctrl+Shift+Space 进入，用 hjkl 选择文本）
     { key = "Space", mods = "Control|Shift", action = "ToggleViMode" },
-    # Alt+Enter 全屏
-    { key = "Enter", mods = "Alt", action = "ToggleFullscreen" },
 ]
 
 
